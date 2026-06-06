@@ -1,0 +1,91 @@
+In this project, a hybrid sentiment analysis system for Twitter data is developed to improve the accuracy and reliability of sentiment classification. The system combines three main models — a transformer model, a logistic regression model, and an LSTM-based sequential model — along with a separate sarcasm detection module. Each model focuses on a specific linguistic aspect: the transformer learns contextual meaning, the logistic regression model captures word-level importance, and the LSTM model learns sequential patterns. The sarcasm detector corrects cases where the literal meaning of a tweet differs from its actual intent. All components work together through a weighted ensemble mechanism, and the input data is preprocessed through an emoji- and slang-aware pipeline. This design helps the system handle the informal and emotionally diverse nature of social media text.
+
+
+Transformer Expert – DistilBERT
+
+The first model in the system is DistilBERT, a lightweight version of the BERT transformer model. It serves as the main sentiment classifier and focuses on understanding the context of each tweet rather than just the individual words. DistilBERT retains around 97% of BERT’s accuracy while being faster and smaller, making it suitable for large-scale and real-time applications. In this project, the model was fine-tuned on 800,000 tweets from the Sentiment140 dataset, which includes equal numbers of positive and negative samples. Tweets are first tokenized using the pre-trained DistilBERT tokenizer and then converted into contextual embeddings using self-attention layers that capture both left and right dependencies between words. The output from the final classification layer generates probabilities for positive or negative sentiment. DistilBERT contributes a deep understanding of language semantics, enabling it to detect tone shifts and emotions in informal social media text.
+
+
+Statistical Expert – TF-IDF with Logistic Regression
+
+The second model is a Logistic Regression (LR) classifier trained on TF-IDF features. This model plays a key role in interpretability and quick prediction. The TF-IDF vectorizer converts each tweet into numerical form, emphasizing words that are more frequent in one sentiment class but rare in another. Logistic Regression is then applied with a regularization parameter (C = 1.0) and the liblinear solver. The model was trained on a subset of 50,000 tweets to maintain computational efficiency. It achieved a validation accuracy of 78.56%, acting as a strong lexical baseline in the ensemble. One of the main advantages of this component is that it can handle abbreviations, slang, and out-of-vocabulary words that the transformer model might miss. It also supports explainability, allowing us to interpret which words have the strongest influence on the sentiment classification
+
+C. Sequential Expert – LSTM
+
+The third model focuses on the order and flow of words in each tweet using a Long Short-Term Memory (LSTM) network. LSTMs are designed to understand time-based or sequential patterns in text. This model helps the system detect how the meaning of a sentence changes depending on word order, which is important for cases like negation or sarcasm. The LSTM used in this work consists of two layers, each with 128 hidden units and a dropout rate of 0.5 to prevent overfitting. An embedding layer of dimension 100 converts words into dense vectors before feeding them into the LSTM. The model was trained on 50,000 tweets for five epochs, achieving a validation accuracy of 74.49%. It is particularly useful for identifying complex expressions such as “I just love waiting in long lines,” where the structure of the sentence affects the true meaning. Overall, the LSTM adds sequential understanding that complements the contextual strength of the transformer and the lexical precision of the LR model.
+
+D. Sarcasm Detector – RoBERTa-Irony
+
+To improve robustness against sarcasm and irony, a separate RoBERTa-Irony model was integrated into the system. This module uses a pre-trained transformer model developed by CardiffNLP, specifically trained on sarcastic tweets. The model analyzes tweets and produces a sarcasm probability score (p_sarc). If the sarcasm score exceeds a defined threshold (typically 0.9), the sentiment output from the ensemble is corrected by either inverting or reducing its confidence. For example, a tweet such as “Oh great, another meeting at 7 AM!” might be misclassified as positive without sarcasm correction, but with this module, it is correctly identified as negative. This module is essential for improving real-world accuracy, as sarcasm and humor are very common in Twitter data.
+
+
+E. Weighted Ensemble Integration
+
+The final sentiment prediction is obtained through a weighted ensemble fusion of the three sentiment models. Each model contributes to the final output according to its weight, depending on its performance and reliability. The formula for integration is given as:
+
+
+
+This weighted combination allows the system to balance the transformer’s contextual understanding, the logistic regression model’s lexical precision, and the LSTM’s sequential reasoning. After fusion, the sarcasm adjustment rule is applied if 
+𝑝
+𝑠
+𝑎
+𝑟
+𝑐
+>
+0.9
+p
+sarc
+	​
+
+>0.9:
+
+
+
+
+
+
+
+In this project, a hybrid sentiment analysis system for Twitter data is developed to improve the accuracy and reliability of sentiment classification. The system combines three main models — a transformer model, a logistic regression model, and an LSTM-based sequential model — along with a separate sarcasm detection module. Each model focuses on a specific linguistic aspect: the transformer learns contextual meaning, the logistic regression model captures word-level importance, and the LSTM model learns sequential patterns. The sarcasm detector corrects cases where the literal meaning of a tweet differs from its actual intent. All components work together through a weighted ensemble mechanism, and the input data is preprocessed through an emoji- and slang-aware pipeline. This design helps the system handle the informal and emotionally diverse nature of social media text.
+Transformer Expert – DistilBERT
+
+The first model in the system is DistilBERT, a lightweight version of the BERT transformer model. It serves as the main sentiment classifier and focuses on understanding the context of each sentences rather than individual words. DistilBERT retains around 97% of BERT’s accuracy which suits for large-scale and real-time applications. In this project, the model was fine-tuned on 800,000 tweets from the Sentiment140 dataset, which includes equal numbers of positive and negative samples. Tweets are first tokenised using the pre-trained DistilBERT tokeniser and then converted into contextual embeddings using self-attention layers that capture both left and right dependencies between words. The output from the final classification layer generates probabilities for positive or negative sentiment. DistilBERT contributes a deep understanding of language semantics, enabling it to detect tone shifts and emotions in informal social media text.
+Statistical Expert – TF-IDF with Logistic Regression
+
+The second model is a Logistic Regression (LR) classifier which is trained on TF-IDF. This model plays a key role in interpretability and quick prediction. The TF-IDF vectorizer converts each tweet into numerical form, emphasizing words that are more frequent in one sentiment class but rare in another. Logistic Regression is then applied with a regularization parameter (C = 1.0) and the liblinear solver. The model was trained on a subset of 50,000 tweets to maintain computational efficiency. It achieved a validation accuracy of 78.56%, acting as a strong lexical baseline in the ensemble. One of the main advantages of this component is that it can handle abbreviations, slang, that the Transformer model alone lacks it . It also supports explainability, allowing us to interpret which words have the strongest influence on the sentiment classification.
+
+C. Sequential Expert – LSTM
+
+The third model focuses on the order and flow of words in each tweet using a Long Short-Term Memory network. LSTMs are designed to understand time-based or sequential patterns in text. This model helps the system detect how the meaning of a sentence changes depending on word order, which is important for cases like negation or sarcasm. The LSTM used in this work consists of two layers, each with 128 hidden units and an 0.5 Dropout rate used to  prevent overfitting. An embedding layer of dimension 100 converts words into dense vectors before feeding them into the LSTM. The model was trained on 50,000 tweets for five epochs, achieving a validation accuracy of 74.49%. It is particularly useful for identifying complex expressions such as “I just love waiting in long lines,” where the structure of the sentence affects the true meaning. Overall, the LSTM adds sequential understanding that complements the contextual strength of the transformer and the lexical precision of the LR model.
+
+D. Sarcasm Detector – RoBERTa-Irony
+
+To improve robustness against sarcasm and irony, a separate RoBERTa-Irony model was integrated into the system. This module uses a pre-trained transformer model developed by CardiffNLP, specifically trained on sarcastic tweets. The model analyses tweets and produces a sarcasm probability score (p_sarc). If the sarcasm score exceeds a defined threshold (typically 0.9), the sentiment output from the ensemble is corrected by either inverting or reducing its confidence. For example, a sentence such as “Love it when my phone dies right before an important call” might be misclassified as positive without sarcasm correction, but with this module, it is correctly identified as negative. This module is essential for improving real-world accuracy with sarcasitic and emoji detected sentences  in Twitter data.
+E. Weighted Ensemble Integration
+
+The final sentiment prediction is obtained through a weighted ensemble fusion of the three sentiment models. where every model will contribute towards the final point according to its weight, depending on its performance and reliability. The formula for integration is given as:
+This weighted combination allows the system to balance the transformer’s contextual understanding, the logistic regression model’s lexical precision, and the LSTM’s sequential reasoning. After fusion, the sarcasm adjustment rule is applied if Psarc > 0.9.
+where 𝛼 = 0.7. This ensures that sarcastic tweets are reclassified correctly based on contextual cues. The final output includes both the sentiment label (positive or negative) and a confidence score.
+
+By combining these models, the proposed hybrid system provides improved accuracy, contextual understanding, and resistance to sarcasm, making it suitable for real-world Twitter sentiment analysis tasks. 
+                 
+
+abstract:
+
+Social media has become a major source of real-time opinions, emotions, and public reactions, especially through platforms like Twitter. This is accompanied by a rapid growth in volumes of unstructured textual data generated by users, creating new opportunities for automated sentiment interpretation. This work outlines a hybrid sentiment analysis framework that merges classic machine learning with modern deep learning for more reliable context-sensitive sentiment classification. This work proposes a system that integrates a transformer-based DistilBERT model for contextual understanding, logistic regression with TF-IDF for lexical precision, and a bidirectional LSTM for sequential dependency learning, all combined through a weighted ensemble approach. An extra preprocessing layer was added to normalize emojis and slang expression, while a sarcasm detection module using RoBERTa adjusts the prediction when irony is detected. This model is trained and evaluated on the Sentiment140 dataset, achieving improved accuracy and robustness compared to typical TF-IDF-based classifiers. These results prove that a hybrid design will provide a greater capacity to handle diverse linguistic expressions, improve performance on noisy data, and give stable predictions across different contexts. The proposed framework has great potential in practical applications such as brand reputation monitoring, social media analytics, and public sentiment tracking. Besides, by incorporating classic interpretability with deep contextual reasoning, the system achieves a good balance between transparency and intelligence, thus laying the foundation for future research in emotion-aware and explainable AI-powered sentiment analysis.
+
+Keywords— Sentiment Analysis (SA), Machine Learning (ML), Natural Language Processing (NLP), Transformer Models, DistilBERT, BiLSTM, TF-IDF, Sarcasm Detection, Social Media Analytics, Hybrid Learning. 
+
+
+
+
+
+
+
+Before the emergence of advanced Natural Language Processing (NLP) models, businesses and researchers primarily relied on manual methods such as surveys, reviews, and customer feedback forms to understand opinions and market sentiment. The rapid expansion of the internet and social media platforms such as Twitter, Facebook, and Instagram has revolutionized the way people communicate their thoughts and emotions online. Every minute, millions of users post opinions, experiences, and reactions in the form of short texts, emojis, and abbreviations. This enormous growth of unstructured data has made Sentiment Analysis (SA) a vital tool for extracting subjective information and understanding human emotions in digital communication. Unlike traditional data analysis methods that rely solely on numerical values, sentiment analysis focuses on interpreting the polarity and intensity of opinions expressed through natural language. It aims to classify text into categories such as positive, negative, or neutral, and in advanced systems, it also attempts to capture emotional nuances such as sarcasm, irony, or mixed sentiments.  Over the last decade, researchers have applied SA across multiple domains including social media monitoring, financial forecasting, healthcare analytics, disaster management, and customer service automation.
+ Its ability to convert textual feedback into quantifiable insights has made it an essential component of data-driven decision-making in both commercial and research environments. However, despite the growing adoption of sentiment analysis systems, several challenges remain. Textual content from social platforms like Twitter is inherently noisy due to the frequent use of slang, abbreviations, emojis, and sarcastic expressions that distort conventional word meanings. Traditional machine learning models such as Support Vector Machines (SVM), Naïve Bayes, and Logistic Regression, which depend on statistical features like Bag-of-Words or TF-IDF, often fail to interpret these context-dependent linguistic variations. To overcome this limitation, deep learning architectures, especially Recurrent Neural Networks (RNN) and Long Short-Term Memory (LSTM) models, were introduced to capture sequential dependencies and contextual relationships between words. Although these models improved accuracy, they still struggle with contextual ambiguity and fail to detect sentiment inversion caused by sarcasm or complex expressions. The introduction of Transformer-based architectures such as BERT, RoBERTa, and DistilBERT has significantly enhanced NLP applications by allowing models to understand words in bidirectional context These models have achieved state-of-the-art results in many tasks including question answering, machine translation, and sentiment analysis. 
+However, even these advanced architectures face limitations when processing informal language patterns or emoji-based sentiments prevalent in social media platforms. To address these shortcomings, this research proposes a hybrid transformer-based sentiment analysis framework that combines the strengths of both traditional and deep learning models. The system integrates contextual representations from DistilBERT, statistical features from TF-IDF with Logistic Regression, and sequential understanding from a Bidirectional LSTM (BiLSTM) network. In addition, a sarcasm detection module built using a RoBERTa model and an emoji-slang normalization pipeline are incorporated to enhance emotion interpretation. The outputs from these models are fused through a weighted ensemble mechanism, which balances precision, interpretability, and contextual awareness for robust sentiment classification.
+This Hybrid approach aims to achieve three main objectives:
+1.	To improve sentiment classification accuracy on noisy and informal Twitter data through multi-model fusion.
+2.	To handle emoji and slang-based expressions that traditional preprocessing pipelines often discard or misinterpret.
+3.	To adjust sentiment polarity dynamically using sarcasm detection, thereby minimizing false classifications in ironic or sarcastic contexts.
+The study utilizes the Sentiment140 dataset, which contains 1.6 million annotated tweets, providing a large-scale and diverse textual corpus for model training and evaluation. By integrating multiple learning paradigms within a unified architecture, the proposed system not only enhances classification accuracy but also demonstrates improved robustness, interpretability, and scalability. The results emphasize the growing significance of hybrid architectures in bridging the gap between human emotional complexity and machine understanding, thereby contributing to the development of more intelligent and context-aware sentiment analysis systems for real-world applications.

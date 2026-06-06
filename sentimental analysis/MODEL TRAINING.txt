@@ -1,0 +1,68 @@
+MODEL TRAINING:
+
+The hybrid architecture proposed underwent training in a modular fashion, with each expert model fine-tuned independently, followed by the subsequent ensembling process.
+
+For the DistilBERT transformer, fine-tuning followed the procedure of Model Training #2 in section 4.2, with 800,000 tweets fine-tuned using the AdamW optimiser at a learning rate of 2×10⁻⁵ with mini-batches through three epochs, reaching a best validation accuracy of 86.56%.
+
+Although the TF-IDF + Logistic Regression classifier and LSTM sequential model were fine-tuned on the entirety of tweets, they instead used 50,000 stratified samples to determine the final parameters, reaching validation accuracies of 78.56% and 74.49%, respectively.
+
+Checkpoints of model training were saved at 10,000-step intervals to avoid losing progress or data to memory or power failure, and provide partial updates if retraining was required.
+
+While the DistilBERT component of training showed trends of steadily increasing accuracy over the epochs, the validation curve did not similarly improve and eventually levelled out indicating that the model generalised well to the test data, with minimal overfitting.
+
+To evaluate how effective the model has been, we have used various traditional evaluation metrics, namely Accuracy, Precision, Recall, and F1-Score. 
+
+These measures assist us in determining how reliable the model is at classifying sentiment by including the percentage of predicted sentiment classes compared to inaccurate sentiment classes. 
+
+**1. Accuracy**: Throughout this work, we wanted to indicate the overall accuracy of the model's predictions and the proportion of tweets classified correctly for the entire sample.
+In these equations, TP and TN = true positives and true negatives, while FP and FN = false positives and false negatives. 
+
+**2. Precision**: indicating the model's capability to determine all relevant positive cases, thereby defining the model's capability of avoiding false positive across all tweets, is a great reference when defining accuracy.
+Therefore, precision is calculated as:
+The greater the precision, the greater the credence to predicting a positive sentiment. 
+
+**3. Recall**: Recall can also be referred to as "sensitivity"; recall dictates the percentage of actual positive class examples that the model is able to identify. In addition, the recall commonly attempts to reduce slow negatives.
+
+Recall is calculated as follows:
+
+4. F1-Score
+
+The F1-score introduced here, combines precision and recall into a single score reflecting the average of these two numbers, or the harmonic mean.
+
+The F1 should be used a average measurement of how accurate the model is and how complete it is.
+
+
+The confusion matrices for each sentiment model show how the tweets were classified, by the total number of correctly and incorrectly classified tweets, across both the positive and negative classes, respectively (Figs. 8-11).
+The Logistic Regression (TF-IDF) model was moderate, and well-balanced, with 30,871 negative tweets correctly classified and 31,682 positive tweets correctly classified, while incorrect, 9,129 were false positives and 8,318 were false negatives, resulting in overall accuracy of 78.19%.
+The hybrid ensemble model increased temporal learning; however, it had a lower accuracy of 74.01%, with 31,195 negative tweets and 28,017 positive tweets correctly classified, but it produced 8,805 false positives and 11,983 false negatives, suggesting it struggles with sarcasm and knowing when sentiment is implicitly reversed.
+The DistilBERT transformer model demonstrated increased performance overall and proper contextual understanding, with 34,850 negative tweets and 34,401 positive tweets correctly classified, while having minimal false (5,150 false positives and 5,599 false negatives), and final performance, was accurate at 86.56% on the testing dataset.
+Finally, the proposed hybrid ensemble model had the greatest level of performance overall, with 34,905 negative tweets correctly classified and 34,361 positive tweets accurately classified, with only 5,095 false positives and 5,639 false negatives, resulting in final performance, accuracy for the testing dataset at 86.58%.
+The results indicate that the weighted integration of the ensemble increased performance while reducing the number of errors based on the class imbalance, and increases reliability within the decision making of the model versus each model working independently.
+
+
+
+
+The Transformer and Ensemble perform better than traditional architectures, as shown by a comparative accuracy chart (Fig. 12). 
+
+
+
+ By combining Transformer-based semantic understanding, BiLSTM sequential context, and TF-IDF lexical features, the multi-level feature fusion approach improves stability and adaptability.
+
+
+
+
+
+
+
+
+
+ To process unseen tweet inputs in real time, an interactive inference mode was put into place. To generate the final sentiment output with a corresponding confidence score, the model combines predictions from four separate modules: DistilBERT, Logistic Regression (TF-IDF), BiLSTM (Sequential RNN), and a RoBERTa-based Sarcasm Detector. 
+
+
+
+ Every test case shows how the model can recognise sarcasm, incorporate predictions from multiple models, and modify sentiment orientation appropriately. When a text is marked as sarcastic with a confidence level higher than 0.90, In order to improve interpretive reliability for irony-laden expressions, the system reverses the sentiment polarity using Equation (7).
+
+Conclusion:
+
+DistilBERT, Logistic Regression, and BiLSTM models are all integrated into a single weighted ensemble architecture in this study's hybrid sarcasm-aware sentiment analysis framework.  By skilfully combining lexical, contextual, and sequential representations, the suggested system makes it possible to fully comprehend the implicit and explicit emotions conveyed in social media text.  In the presence of ironic or unclear content, a specialised sarcasm detection module based on RoBERTa dynamically recalibrates sentiment polarity, further improving interpretability.  The ensemble model outperformed all individual submodels with an overall accuracy of 86.58%, according to experimental evaluation on the Sentiment140 dataset.  The confusion matrix's findings verified that both the positive and negative sentiment classes had balanced classification performance.
+Furthermore, the system's resilience in managing intricate linguistic elements like emojis, slang, and sarcasm was confirmed by qualitative analysis using case studies.  All things considered, the suggested architecture creates a sentiment analysis solution that is scalable, interpretable, and context-aware and appropriate for real-time social media applications.  To improve its adaptability across a variety of contexts, future studies will concentrate on expanding this framework to multilingual sentiment detection and fine-grained emotion classification.

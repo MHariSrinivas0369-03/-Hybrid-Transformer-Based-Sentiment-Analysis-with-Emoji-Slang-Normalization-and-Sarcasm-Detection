@@ -1,0 +1,107 @@
+Example Sentences:
+Raw: I absolutely love the new update — smooth and fast!
+Raw: Best customer service ever. Thank you team! 🙌
+
+Raw: Finally solved the bug — feeling proud :)
+Raw: Great experience, would totally recommend.
+.
+
+Raw: Wow—the camera quality is amazing! #impressed
+
+Raw: Five stars ⭐⭐⭐⭐⭐ — absolutely worth it!
+
+Negative
+
+Raw: This app keeps crashing. So frustrating.
+
+Raw: Terrible service — waited 2 hours and still no help.
+Raw: Worst movie I've seen this year. Waste of time.
+
+Raw: Refund requested. Product arrived broken.
+
+Raw: So disappointed… expected much better quality 😒
+Raw: Not happy with the update, lost my data.
+
+Sarcastic (literal words positive but intended negative)
+
+Note: model’s sarcasm detector should flag these; final sentiment should be negative after sarcasm adjustment.
+
+Raw: Oh great, my phone died right before the presentation.
+Preprocessed: oh great my phone died right before the presentation
+Output: Sarcastic → Final Negative — positive surface token “great” + negative context.
+
+Raw: Love it when the train is late for the third time this week.
+Preprocessed: love it when the train is late for the third time this week
+Output: Sarcastic → Final Negative
+
+Raw: Fantastic — another Monday meeting, just what I needed.
+Preprocessed: fantastic another monday meeting just what i needed
+Output: Sarcastic → Final Negative
+
+Raw: Perfect, my laptop chooses today to freeze. Awesome.
+Preprocessed: perfect my laptop chooses today to freeze awesome
+Output: Sarcastic → Final Negative
+
+Raw: Great job, team — we broke production again.
+Preprocessed: great job team we broke production again
+Output: Sarcastic → Final Negative
+
+Raw: So happy to pay extra for broken features. Wow.
+Preprocessed: so happy to pay extra for broken features wow
+Output: Sarcastic → Final Negative
+
+(When you present these, show the model breakdown: DistilBERT may predict Positive, LR/RNN may vary — RoBERTa sarcasm detects irony and flips/attenuates final decision.)
+
+Slang / Informal
+
+(These test the slang-normalizer. show both raw → normalized → label)
+
+Raw: luv this new skin, fr it looks sick ngl
+Preprocessed: love this new skin for real it looks amazing not gonna lie
+Output: Positive — slang expanded; strong positive meaning.
+
+Raw: brb, this update is lit 🔥
+Preprocessed: be right back this update is lit fire
+Output: Positive — “lit” → positive; emoji reinforces.
+
+Raw: idk why ppl r so rude tbh
+Preprocessed: i do not know why people are so rude to be honest
+Output: Negative — “rude” token dominates after expansion.
+
+Raw: this feature is sus, lowkey buggy
+Preprocessed: this feature is suspicious lowkey buggy
+Output: Negative — slang “sus” and “buggy” → negative.
+
+Raw: thx for the help, u da best <3
+Preprocessed: thanks for the help you the best heart
+Output: Positive — gratitude + heart emoji.
+
+Raw: omg this is so cringe, smh
+Preprocessed: oh my god this is so cringe shake my head
+Output: Negative — “cringe” + “smh” → negative sentiment.
+
+Emoji-Focused (show how emojis change/confirm sentiment)
+
+Raw: I passed the exam 😭😭😭
+Preprocessed: i passed the exam crying_face crying_face crying_face
+Output: Positive — context matters: crying here = tears of joy (model should learn context).
+
+Raw: Ugh… package delayed 😒
+Preprocessed: ugh package delayed unamused_face
+Output: Negative — negative emoji.
+
+Raw: So proud of you 👏👏👏
+Preprocessed: so proud of you clap clap clap
+Output: Positive
+
+Raw: Great. Another bug 😂
+Preprocessed: great another bug face_with_tears_of_joy
+Output: Sarcastic → Final Negative — laughter emoji used sarcastically; sarcasm detector should catch it.
+
+Raw: Totally enjoyed the movie 🙌❤️
+Preprocessed: totally enjoyed the movie raising_hands red_heart
+Output: Positive
+
+Raw: Not coming to the party 😑
+Preprocessed: not coming to the party expressionless_face
+Output: Negative — negation + flat emoji.
